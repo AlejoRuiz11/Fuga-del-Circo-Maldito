@@ -43,3 +43,4 @@ public class InteractionAux : MonoBehaviour,IInteractable
         Debug.Log("Flashlight");
     }
 }
+
