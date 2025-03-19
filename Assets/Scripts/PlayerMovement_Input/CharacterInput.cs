@@ -27,7 +27,7 @@ public class CharacterInput : MonoBehaviour
 
         if(Input.GetKey(jump)) characterJump.Jump();
 
-        if (Input.GetKey(interact)) playerInteraction.Interact();
+        if (Input.GetKeyDown(interact)) playerInteraction.Interact();
 
         if(Input.GetKey(forward) || Input.GetKey(back) || Input.GetKey(left) || Input.GetKey(right))
         {

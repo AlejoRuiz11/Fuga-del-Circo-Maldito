@@ -48,10 +48,11 @@ public class CharacterMovement : MonoBehaviour
     private void LateUpdate()
     {
         // Hacer que el personaje rote en el eje Y según la cámara
+        
         player.rotation = Quaternion.Euler(0f, cineMachineCamera.eulerAngles.y, 0f);
         head.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
         arm.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
-
+        
         //cineMachineCamera.position = head.position;
     }
 }

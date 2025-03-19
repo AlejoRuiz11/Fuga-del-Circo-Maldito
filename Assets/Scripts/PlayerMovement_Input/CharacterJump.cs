@@ -15,7 +15,7 @@ public class CharacterJump : MonoBehaviour
     {
         CheckGrounded();
         Vector3 move = new Vector3(0,VerticalForceCalculation(),0);
-        characterMovement.Move(move);
+        characterMovement?.Move(move);
     }
 
     private void CheckGrounded()
