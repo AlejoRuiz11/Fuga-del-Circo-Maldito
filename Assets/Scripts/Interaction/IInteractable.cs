@@ -10,3 +10,4 @@ public interface IInteractable
     void DisableOutline();
     void EnableOutline();
 }
+
