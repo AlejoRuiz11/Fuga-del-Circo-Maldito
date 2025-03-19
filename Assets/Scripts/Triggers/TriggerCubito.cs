@@ -11,7 +11,7 @@ public class TriggerCubito : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
-            audioSource.Play();
+            audioSource.PlayOneShot(audioSource.clip, 0.5f);
         }
     }
 }
