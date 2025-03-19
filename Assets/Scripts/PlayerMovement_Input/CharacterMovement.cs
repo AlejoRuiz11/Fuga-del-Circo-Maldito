@@ -6,7 +6,8 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CharacterController characterController;
 
-    [SerializeField] private Transform player; // Referencia al objeto del jugador
+    [SerializeField] private Transform player; // objeto con el cual detectara el forward ******C
+    [SerializeField] private Transform playerAllBody;
     [SerializeField] private Transform cineMachineCamera; // Referencia a la CinemachineCamera
     [SerializeField] private Transform head;
     [SerializeField] private Transform arm;
@@ -14,19 +15,23 @@ public class CharacterMovement : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
-        Cursor.visible = false; // Oculta el cursor
+        Cursor.visible = false;
     }
 
     // Método para mover al personaje
     public void Move(Vector3 input)
     {
-        Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized;
-        /*Debug.Log(input.y);
-        if(input.y != -1)
-        {
-            
-        }*/
-        moveDirection.y = player.up.y * input.y;
+        Vector3 forward1 = player.forward;
+        forward1.y = 0; // Eliminamos la componente vertical
+        forward1.Normalize(); // Normalizamos nuevamente
+
+        Vector3 moveDirection = (player.right * input.x + playerAllBody.up * input.y + forward1 * input.z).normalized;
+        //Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized; // *****C
+       
+       
+        moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
+        //moveDirection.y = player.up.y * input.y; // *****C
+        
         moveDirection.x *= speed;
         moveDirection.z *= speed;
 
@@ -39,6 +44,7 @@ public class CharacterMovement : MonoBehaviour
             //rb.MovePosition(rb.position + velocity * Time.deltaTime);
 
             // Modificando Character Controller
+            //characterController.Move(moveDirection.normalized * 5 * Time.deltaTime);
             characterController.Move(moveDirection * Time.deltaTime);
         
        
@@ -47,12 +53,11 @@ public class CharacterMovement : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Hacer que el personaje rote en el eje Y según la cámara
-        
+        //Movimiento normal *****C
+    /*
         player.rotation = Quaternion.Euler(0f, cineMachineCamera.eulerAngles.y, 0f);
         head.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
         arm.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
-        
-        //cineMachineCamera.position = head.position;
+        */
     }
 }

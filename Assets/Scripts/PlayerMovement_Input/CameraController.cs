@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform cameraRoot; // Objeto que controla la rotación de la cámara
+    public Transform visualBody;
     public Transform hand;
     public Transform _camera;
     public float sensitivity = 200f; // Sensibilidad del mouse
@@ -43,6 +43,9 @@ public class CameraController : MonoBehaviour
         hand.localRotation = Quaternion.Euler(-xRotation, yRotation, 0);
 
         transform.localRotation = Quaternion.Lerp(transform.localRotation,
+        Quaternion.Euler(0, yRotation, 0), cameraAcceleration * Time.deltaTime);
+
+        visualBody.localRotation = Quaternion.Lerp(visualBody.localRotation,
         Quaternion.Euler(0, yRotation, 0), cameraAcceleration * Time.deltaTime);
 
         _camera.localRotation = Quaternion.Lerp(_camera.localRotation,
