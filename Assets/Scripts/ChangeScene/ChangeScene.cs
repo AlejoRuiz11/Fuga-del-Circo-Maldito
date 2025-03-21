@@ -7,9 +7,11 @@ public class ChangeScene : MonoBehaviour
     public GameObject screenConfig;
     public GameObject screenCredits;
     public GameObject screenInstructions;
+    [SerializeField] private AudioSource audioSource;
 
     public void CargarEscena()
     {
+        audioSource.Stop();
         SceneManager.LoadScene("Scene1");
     }
 
