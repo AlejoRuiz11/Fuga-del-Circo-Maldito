@@ -3,6 +3,11 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     public float speed = 5f;
+
+    public float walkSpeed = 5f;
+    public float runSpeed = 10f;
+    public KeyCode sprintKey = KeyCode.LeftShift;
+
     [SerializeField] private Rigidbody rb;
     [SerializeField] private CharacterController characterController;
 
@@ -28,10 +33,16 @@ public class CharacterMovement : MonoBehaviour
         Vector3 moveDirection = (player.right * input.x + playerAllBody.up * input.y + forward1 * input.z).normalized;
         //Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized; // *****C
        
-       
         moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
         //moveDirection.y = player.up.y * input.y; // *****C
-        
+        if (Input.GetKey(sprintKey))
+        {
+            speed = runSpeed;
+        }
+        else
+        {
+            speed = walkSpeed;
+        }
         moveDirection.x *= speed;
         moveDirection.z *= speed;
 
@@ -45,9 +56,7 @@ public class CharacterMovement : MonoBehaviour
 
             // Modificando Character Controller
             //characterController.Move(moveDirection.normalized * 5 * Time.deltaTime);
-            characterController.Move(moveDirection * Time.deltaTime);
-        
-       
+        characterController.Move(moveDirection * Time.deltaTime);
 
     }
 
