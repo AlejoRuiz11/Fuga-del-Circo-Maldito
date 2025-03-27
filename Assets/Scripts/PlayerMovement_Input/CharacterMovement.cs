@@ -1,14 +1,16 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    public float speed = 5f;
+    public float speed;
 
-    public float walkSpeed = 5f;
-    public float runSpeed = 10f;
-    public KeyCode sprintKey = KeyCode.LeftShift;
+    public float walkSpeed = 3.5f;
+    public float runSpeed = 7f;
+    
 
-    [SerializeField] private Rigidbody rb;
+    [SerializeField] private CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
+    //[SerializeField] private Rigidbody rb;
     [SerializeField] private CharacterController characterController;
 
     [SerializeField] private Transform player; // objeto con el cual detectara el forward ******C
@@ -23,6 +25,24 @@ public class CharacterMovement : MonoBehaviour
         Cursor.visible = false;
     }
 
+    public void setSpeed(float amplitudGain, float frequencyGain, float speed1)
+    {
+        /*
+        float duration = 0.5f;
+        float t = 1 - Mathf.Exp(-Time.deltaTime / duration);
+
+        cinemachineBasicMultiChannelPerlin.AmplitudeGain = Mathf.Lerp(
+            cinemachineBasicMultiChannelPerlin.AmplitudeGain, amplitudGain, t
+        );
+
+        cinemachineBasicMultiChannelPerlin.FrequencyGain = Mathf.Lerp(
+            cinemachineBasicMultiChannelPerlin.FrequencyGain, frequencyGain, t
+        );
+
+        speed = Mathf.Lerp(speed, speed1, t);*/
+        speed = speed1;
+    }
+
     // Método para mover al personaje
     public void Move(Vector3 input)
     {
@@ -35,14 +55,7 @@ public class CharacterMovement : MonoBehaviour
        
         moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
         //moveDirection.y = player.up.y * input.y; // *****C
-        if (Input.GetKey(sprintKey))
-        {
-            speed = runSpeed;
-        }
-        else
-        {
-            speed = walkSpeed;
-        }
+        
         moveDirection.x *= speed;
         moveDirection.z *= speed;
 
