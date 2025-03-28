@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CharacterInput : MonoBehaviour
 {
+    [SerializeField] private CharacterInventoryUI inventoryUI;
     [SerializeField] private CharacterMovement characterMovement;
     [SerializeField] private PlayerInteraction playerInteraction;
     [SerializeField] private CharacterJump characterJump;
@@ -14,6 +15,7 @@ public class CharacterInput : MonoBehaviour
     [SerializeField] private KeyCode right = KeyCode.D;
     [SerializeField] private KeyCode interact = KeyCode.E;
     [SerializeField] private KeyCode jump = KeyCode.Space;
+    [SerializeField] private KeyCode openInventory = KeyCode.Q;
     [SerializeField] private KeyCode sprint = KeyCode.LeftShift;
 
     void Update()
@@ -24,6 +26,11 @@ public class CharacterInput : MonoBehaviour
         if (Input.GetKey(back)) moveInput.z -= 1;
         if (Input.GetKey(left)) moveInput.x -= 1;
         if (Input.GetKey(right)) moveInput.x += 1;
+
+        if (Input.GetKeyDown(openInventory))
+        {
+            inventoryUI.ToggleInventory();
+        }
 
         if(Input.GetKey(jump)) characterJump.Jump();
 
