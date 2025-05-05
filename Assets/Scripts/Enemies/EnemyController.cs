@@ -8,13 +8,15 @@ public class EnemyController : MonoBehaviour
     public float velocidadRotacion = 2f;
     public AudioSource audioSource;
     public bool enZonaSegura = false;
+    public bool enZonaJumpScare = false;
+    private bool empezoJumpScare = false;
+    [SerializeField] private CameraController cameraController;
+    [SerializeField] private CharacterMovement characterMovement;
     //[SerializeField] private SafeZone safeZoneScript;
 
     void Update()
     {
-        //enZonaSegura = safeZoneScript.enZonaSegura;
-
-        if (jugador == null || Camera.main == null || enZonaSegura) 
+        if ((jugador == null || Camera.main == null || enZonaSegura) && !empezoJumpScare) 
         {
             // Si está en zona segura, no hace naSda
             animator.speed = 0f;
@@ -22,6 +24,23 @@ public class EnemyController : MonoBehaviour
             {
                 audioSource.Stop();
             }
+            return;
+        }
+        if(enZonaJumpScare)
+        {   
+
+            animator.SetBool("Jumpscare", true);
+            
+            //transform.position += transform.forward;
+
+            empezoJumpScare = true;
+            animator.speed = 1f;
+            cameraController.enemyTransform = transform;
+            cameraController.jumpScare = true;
+            characterMovement.jumpScare = true;
+            //StartCoroutine(FacePlayer());
+            
+
             return;
         }
 
@@ -51,4 +70,39 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+
+    public void Jumpscare()
+    {
+        enZonaJumpScare = true;
+            cameraController.jumpScare = true;
+            characterMovement.jumpScare = true;
+            
+            Vector3 direccion = (transform.position - jugador.position).normalized;
+            // Ignorar eje Y para que la rotación sea solo horizontal
+            direccion.y = 0;
+
+            if (direccion != Vector3.zero)
+            {
+                Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
+                jugador.rotation = Quaternion.Slerp(jugador.rotation, rotacionDeseada, 2f * Time.deltaTime);
+            }
+
+    }
+/*
+    private IEnumerator FacePlayer()
+    {
+        float rotationSpeed = 3f;
+        while(enZonaJumpScare)
+        {
+            Vector3 directionToPlayer = jugador.transform.position - transform.position;
+            directionToPlayer.y = 0;
+
+            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+
+            jugador.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            jugador.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime * 2);
+
+            yield return null;
+        }
+    }*/
 }

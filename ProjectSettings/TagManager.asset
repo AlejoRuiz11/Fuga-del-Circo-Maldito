@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - SafeZone
+  - JumpScareZone
   layers:
   - Default
   - TransparentFX
