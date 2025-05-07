@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
+  - Anillo10
+  - Anillo8
+  - Anillo6
+  - Anillo4
+  - Anillo2
   layers:
   - Default
   - TransparentFX
