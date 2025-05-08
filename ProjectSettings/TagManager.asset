@@ -5,11 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
-  - Anillo10
-  - Anillo8
-  - Anillo6
-  - Anillo4
-  - Anillo2
+  - Arma
+  - Payaso
   layers:
   - Default
   - TransparentFX
@@ -20,7 +17,7 @@ TagManager:
   - Ground
   - Player
   - Interactable
-  - 
+  - Payaso
   - 
   - 
   - 

@@ -6,6 +6,11 @@ public class IniciarMinijuego : MonoBehaviour
     public string nombreEscenaMinijuego = "MinijuegoTiro";
     private bool jugadorDentro = false;
 
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
     void Update()
     {
         if (jugadorDentro && Input.GetKeyDown(KeyCode.E))
