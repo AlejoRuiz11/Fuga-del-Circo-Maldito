@@ -1,5 +1,7 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -10,8 +12,12 @@ public class EnemyController : MonoBehaviour
     public bool enZonaSegura = false;
     public bool enZonaJumpScare = false;
     private bool empezoJumpScare = false;
+    [SerializeField] private GameObject playerFlashLight;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private CharacterMovement characterMovement;
+    [SerializeField] private GameObject JumpscareCamera;
+    [SerializeField] private AudioSource audioSourceJumpScare;
+    [SerializeField] private CinemachineCamera mainCamera;
     //[SerializeField] private SafeZone safeZoneScript;
 
     void Update()
@@ -28,17 +34,18 @@ public class EnemyController : MonoBehaviour
         }
         if(enZonaJumpScare)
         {   
-
+            audioSourceJumpScare.PlayOneShot(audioSourceJumpScare.clip, 0.5f);
             animator.SetBool("Jumpscare", true);
-            
             //transform.position += transform.forward;
 
             empezoJumpScare = true;
             animator.speed = 1f;
             cameraController.enemyTransform = transform;
+            cameraController.sensitivity = 0f;
             cameraController.jumpScare = true;
             characterMovement.jumpScare = true;
             //StartCoroutine(FacePlayer());
+            StartCoroutine(JumpScare());
             
 
             return;
@@ -71,23 +78,15 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void Jumpscare()
+    private IEnumerator JumpScare()
     {
-        enZonaJumpScare = true;
-            cameraController.jumpScare = true;
-            characterMovement.jumpScare = true;
-            
-            Vector3 direccion = (transform.position - jugador.position).normalized;
-            // Ignorar eje Y para que la rotación sea solo horizontal
-            direccion.y = 0;
-
-            if (direccion != Vector3.zero)
-            {
-                Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
-                jugador.rotation = Quaternion.Slerp(jugador.rotation, rotacionDeseada, 2f * Time.deltaTime);
-            }
-
+        yield return new WaitForSeconds(0.5f);
+        playerFlashLight.SetActive(false);
+        JumpscareCamera.SetActive(true);
+        mainCamera.enabled = false;
+        
     }
+    
 /*
     private IEnumerator FacePlayer()
     {
