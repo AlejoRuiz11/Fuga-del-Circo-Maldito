@@ -18,6 +18,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject JumpscareCamera;
     [SerializeField] private AudioSource audioSourceJumpScare;
     [SerializeField] private CinemachineCamera mainCamera;
+    [SerializeField] private LayerMask capaParedes;
+    [SerializeField] private float distanciaDeteccion = 1f;
+
     //[SerializeField] private SafeZone safeZoneScript;
 
     void Update()
@@ -57,15 +60,28 @@ public class EnemyController : MonoBehaviour
 
         if (!estaEnPantalla)
         {
-            animator.speed = 1f;
+            Vector3 direccion = transform.forward;
+            bool hayParedAdelante = Physics.Raycast(transform.position, direccion, distanciaDeteccion, capaParedes);
             Vector3 objetivo = new Vector3(jugador.position.x, transform.position.y, jugador.position.z);
-            Vector3 direccion = (objetivo - transform.position).normalized;
+                Vector3 direccion1 = (objetivo - transform.position).normalized;
 
-            Quaternion rotacionDeseada = Quaternion.LookRotation(direccion);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, velocidadRotacion * Time.deltaTime);
-            if (!audioSource.isPlaying)
+                Quaternion rotacionDeseada = Quaternion.LookRotation(direccion1);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, velocidadRotacion * Time.deltaTime);
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
+            if (!hayParedAdelante)
             {
-                audioSource.Play();
+                animator.speed = 1f;
+            }
+            else
+            {
+                animator.speed = 0f;
+                if (audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                }
             }
         }
         else
