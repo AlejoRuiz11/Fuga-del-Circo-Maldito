@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Interactable
+  - SafeZone
+  - JumpScareZone
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - Ground
   - Player
   - Interactable
-  - 
+  - Wall
   - 
   - 
   - 

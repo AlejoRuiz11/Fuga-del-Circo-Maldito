@@ -4,7 +4,7 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     public float speed;
-
+    public bool jumpScare = false;
     public float walkSpeed = 3.5f;
     public float runSpeed = 7f;
     
@@ -46,30 +46,34 @@ public class CharacterMovement : MonoBehaviour
     // Método para mover al personaje
     public void Move(Vector3 input)
     {
-        Vector3 forward1 = player.forward;
-        forward1.y = 0; // Eliminamos la componente vertical
-        forward1.Normalize(); // Normalizamos nuevamente
+        if(!jumpScare)
+        {
+            Vector3 forward1 = player.forward;
+            forward1.y = 0; // Eliminamos la componente vertical
+            forward1.Normalize(); // Normalizamos nuevamente
 
-        Vector3 moveDirection = (player.right * input.x + playerAllBody.up * input.y + forward1 * input.z).normalized;
-        //Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized; // *****C
-       
-        moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
-        //moveDirection.y = player.up.y * input.y; // *****C
+            Vector3 moveDirection = (player.right * input.x + playerAllBody.up * input.y + forward1 * input.z).normalized;
+            //Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized; // *****C
         
-        moveDirection.x *= speed;
-        moveDirection.z *= speed;
+            moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
+            //moveDirection.y = player.up.y * input.y; // *****C
+            
+            moveDirection.x *= speed;
+            moveDirection.z *= speed;
 
 
-            // Modificando Transform
-            //player.position += moveDirection * speed * Time.deltaTime;
+                // Modificando Transform
+                //player.position += moveDirection * speed * Time.deltaTime;
 
-            // Modificando Rigidbody
-            //Vector3 velocity = moveDirection * speed;
-            //rb.MovePosition(rb.position + velocity * Time.deltaTime);
+                // Modificando Rigidbody
+                //Vector3 velocity = moveDirection * speed;
+                //rb.MovePosition(rb.position + velocity * Time.deltaTime);
 
-            // Modificando Character Controller
-            //characterController.Move(moveDirection.normalized * 5 * Time.deltaTime);
-        characterController.Move(moveDirection * Time.deltaTime);
+                // Modificando Character Controller
+                //characterController.Move(moveDirection.normalized * 5 * Time.deltaTime);
+            characterController.Move(moveDirection * Time.deltaTime);
+        }
+        
 
     }
 
