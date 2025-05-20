@@ -107,6 +107,6 @@ public class InicioMinijuego : MonoBehaviour
 
     public void Siguiente()
     {
-        SceneManager.LoadScene("Scene1");
+        SceneManager.LoadScene("Scene2");
     }
 }

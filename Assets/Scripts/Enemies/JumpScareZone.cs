@@ -15,7 +15,7 @@ public class JumpScareZone: MonoBehaviour
     {
         if (other.gameObject.tag == "JumpScareZone")
         {
-            //enemyController.enZonaJumpScare = false;
+            enemyController.enZonaJumpScare = false;
         }
     }
 }
