@@ -12,7 +12,7 @@ public class ChangeScene : MonoBehaviour
     public void CargarEscena()
     {
         audioSource.Stop();
-        SceneManager.LoadScene("Scene1");
+        SceneManager.LoadScene("Scene2");
     }
 
     public void MostrarConfiguracion()

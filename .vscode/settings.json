@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Fuga del Circo Maldito.sln"
+    "dotnet.defaultSolution": "Fuga-del-Circo-Maldito.sln"
 }

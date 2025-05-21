@@ -935,8 +935,8 @@ MonoBehaviour:
   panelVictoria: {fileID: 1771443997}
   panelDerrota: {fileID: 1951625784}
   cronometroActivo: 0
-  tiempoRestante: 15
-  objetivoAciertos: 15
+  tiempoRestante: 30
+  objetivoAciertos: 80
 --- !u!1 &890640728
 GameObject:
   m_ObjectHideFlags: 0
@@ -2489,7 +2489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabPayaso: {fileID: 2232339615328571015, guid: 5f4248007722e344e8081826a1051742, type: 3}
   tiempoEntrePayasos: 0.3
-  cantidadMaxima: 30
+  cantidadMaxima: 80
   textoContador: {fileID: 1478315638}
 --- !u!1 &1771443997
 GameObject:
