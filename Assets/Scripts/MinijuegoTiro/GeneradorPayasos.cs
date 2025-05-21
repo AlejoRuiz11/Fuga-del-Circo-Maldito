@@ -39,9 +39,9 @@ public class GeneradorPayasos : MonoBehaviour
 
         if (tiempoSiguiente <= 0f && cantidadActual < cantidadMaxima)
         {
-            float x = Random.Range(-5f, 5f);
+            float x = Random.Range(-4.5f, 4.5f);
             float y = Random.Range(1f, 3.5f);
-            float z = Random.Range(-6f, -0.5f);
+            float z = Random.Range(-4.5f, -0.5f);
 
             Vector3 posicion = new Vector3(x, y, z);
             Quaternion rotacion = Quaternion.Euler(0, 180, 0);
