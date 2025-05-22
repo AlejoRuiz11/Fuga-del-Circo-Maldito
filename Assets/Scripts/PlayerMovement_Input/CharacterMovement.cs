@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -19,10 +20,34 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Transform head;
     [SerializeField] private Transform arm;
 
-    private void Start()
+    void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (PlayerPrefs.GetInt("PostMiniJuego", 0) == 1)
+        {
+            GameObject puntoReaparicion = GameObject.Find("SpawnPostMiniJuego");
+            if (puntoReaparicion != null)
+            {
+                transform.position = puntoReaparicion.transform.position;
+                Debug.Log("Spawn post-minijuego aplicado.");
+                PlayerPrefs.DeleteKey("PostMiniJuego");
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró el objeto 'SpawnPostMiniJuego' en la escena.");
+            }
+        }
+
+        if (PlayerPrefs.GetInt("TienePartidaGuardada", 0) == 1)
+        {
+            float x = PlayerPrefs.GetFloat("PosX", transform.position.x);
+            float y = PlayerPrefs.GetFloat("PosY", transform.position.y);
+            float z = PlayerPrefs.GetFloat("PosZ", transform.position.z);
+            transform.position = new Vector3(x, y, z);
+            Debug.Log("Posición cargada desde partida guardada: " + transform.position);
+        }
     }
 
     public void setSpeed(float amplitudGain, float frequencyGain, float speed1)
