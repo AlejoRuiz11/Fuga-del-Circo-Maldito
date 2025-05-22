@@ -107,6 +107,8 @@ public class InicioMinijuego : MonoBehaviour
 
     public void Siguiente()
     {
+        PlayerPrefs.SetInt("PostMiniJuego", 1);
         SceneManager.LoadScene("Scene2");
+        Debug.Log("seteado spawn post-minijuego");
     }
 }

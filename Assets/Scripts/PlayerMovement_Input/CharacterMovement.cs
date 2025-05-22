@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class CharacterMovement : MonoBehaviour
     public bool jumpScare = false;
     public float walkSpeed = 3.5f;
     public float runSpeed = 7f;
-    
+
 
     [SerializeField] private CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
     //[SerializeField] private Rigidbody rb;
@@ -19,15 +20,39 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Transform head;
     [SerializeField] private Transform arm;
 
-    private void Start()
+    void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (PlayerPrefs.GetInt("PostMiniJuego", 0) == 1)
+        {
+            GameObject puntoReaparicion = GameObject.Find("SpawnPostMiniJuego");
+            if (puntoReaparicion != null)
+            {
+                transform.position = puntoReaparicion.transform.position;
+                Debug.Log("Spawn post-minijuego aplicado.");
+                PlayerPrefs.DeleteKey("PostMiniJuego");
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró el objeto 'SpawnPostMiniJuego' en la escena.");
+            }
+        }
+
+        if (PlayerPrefs.GetInt("TienePartidaGuardada", 0) == 1)
+        {
+            float x = PlayerPrefs.GetFloat("PosX", transform.position.x);
+            float y = PlayerPrefs.GetFloat("PosY", transform.position.y);
+            float z = PlayerPrefs.GetFloat("PosZ", transform.position.z);
+            transform.position = new Vector3(x, y, z);
+            Debug.Log("Posición cargada desde partida guardada: " + transform.position);
+        }
     }
 
     public void setSpeed(float amplitudGain, float frequencyGain, float speed1)
     {
-        /*
+    /*
         float duration = 0.5f;
         float t = 1 - Mathf.Exp(-Time.deltaTime / duration);
 
@@ -54,10 +79,10 @@ public class CharacterMovement : MonoBehaviour
 
             Vector3 moveDirection = (player.right * input.x + playerAllBody.up * input.y + forward1 * input.z).normalized;
             //Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized; // *****C
-        
+
             moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
             //moveDirection.y = player.up.y * input.y; // *****C
-            
+
             moveDirection.x *= speed;
             moveDirection.z *= speed;
 
@@ -73,17 +98,15 @@ public class CharacterMovement : MonoBehaviour
                 //characterController.Move(moveDirection.normalized * 5 * Time.deltaTime);
             characterController.Move(moveDirection * Time.deltaTime);
         }
-        
-
     }
 
     private void LateUpdate()
     {
         //Movimiento normal *****C
-    /*
-        player.rotation = Quaternion.Euler(0f, cineMachineCamera.eulerAngles.y, 0f);
-        head.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
-        arm.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
+        /*
+            player.rotation = Quaternion.Euler(0f, cineMachineCamera.eulerAngles.y, 0f);
+            head.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
+            arm.rotation = Quaternion.Euler(cineMachineCamera.eulerAngles.x, cineMachineCamera.eulerAngles.y, 0f);
         */
     }
 }

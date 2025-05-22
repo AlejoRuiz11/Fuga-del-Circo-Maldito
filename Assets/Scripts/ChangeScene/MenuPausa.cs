@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 public class MenuPausa : MonoBehaviour
 {
     public GameObject panelConfirmacionSalida;
+    public GameObject panelConfirmacionGuardado;
+    public GameObject screenInstructions;
     public GameObject panelPausa;
 
     private bool juegoPausado = false;
@@ -13,6 +15,8 @@ public class MenuPausa : MonoBehaviour
     {
         Time.timeScale = 1f;
         panelPausa.SetActive(false);
+        panelConfirmacionGuardado.SetActive(false);
+
     }
 
     void Update()
@@ -60,5 +64,39 @@ public class MenuPausa : MonoBehaviour
     public void CancelarSalida()
     {
         panelConfirmacionSalida.SetActive(false);
+    }
+
+    public void MostrarConfirmacionGuardar()
+    {
+        panelConfirmacionGuardado.SetActive(true);
+    }
+
+    public void ConfirmarGuardado()
+    {
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            PlayerPrefs.SetFloat("PosX", player.transform.position.x);
+            PlayerPrefs.SetFloat("PosY", player.transform.position.y);
+            PlayerPrefs.SetFloat("PosZ", player.transform.position.z);
+            PlayerPrefs.SetInt("TienePartidaGuardada", 1);
+            Debug.Log("Partida guardada exitosamente.");
+        }
+        panelConfirmacionGuardado.SetActive(false);
+    }
+
+    public void CancelarGuardado()
+    {
+        panelConfirmacionGuardado.SetActive(false);
+    }
+        public void MostrarInstrucciones()
+    {
+        panelPausa.SetActive(false);
+        screenInstructions.SetActive(true);
+    }
+        public void CerrarInstruccionesScene2()
+    {
+        screenInstructions.SetActive(false);
+        panelPausa.SetActive(true);
     }
 }
