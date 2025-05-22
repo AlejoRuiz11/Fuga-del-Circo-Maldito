@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip m_SonidoAcierto;
     [SerializeField] AudioClip m_SonidoError;
     [SerializeField] private TextMeshPro m_TextoIntentos;
+    [SerializeField] private Puerta puertaScript;
+    [SerializeField] private GameObject puntoCentro;
 
     private void Awake()
     {
@@ -85,10 +87,12 @@ public class GameManager : MonoBehaviour
         StartCoroutine(BloquearSeleccionPorTiempo(1.5f));
 
         m_Tablero.m_FichasRestantes -= 2;
-        
+
         if (m_Tablero.m_FichasRestantes <= 0)
         {
-            //TODO Ganamos
+            puertaScript.HasKey();
+            puertaScript.AbrirCerrar();
+            puntoCentro.SetActive(false);
         }
     }
 

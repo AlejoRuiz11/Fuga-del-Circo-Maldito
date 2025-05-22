@@ -6,6 +6,7 @@ public class CharacterInput : MonoBehaviour
     [SerializeField] private PlayerInteraction playerInteraction;
     [SerializeField] private CharacterJump characterJump;
     [SerializeField] private Transform player; // Referencia al objeto del jugador
+    [SerializeField] private GameObject flashLight;   
 
     //[SerializeField] private Transform cameraTransform;
     [SerializeField] private KeyCode forward = KeyCode.W;
@@ -15,6 +16,7 @@ public class CharacterInput : MonoBehaviour
     [SerializeField] private KeyCode interact = KeyCode.E;
     [SerializeField] private KeyCode jump = KeyCode.Space;
     [SerializeField] private KeyCode sprint = KeyCode.LeftShift;
+    [SerializeField] private KeyCode rightClick = KeyCode.Mouse1;
 
     void Update()
     {
@@ -25,7 +27,7 @@ public class CharacterInput : MonoBehaviour
         if (Input.GetKey(left)) moveInput.x -= 1;
         if (Input.GetKey(right)) moveInput.x += 1;
 
-        if(Input.GetKey(jump)) characterJump.Jump();
+        if (Input.GetKey(jump)) characterJump.Jump();
 
         if (Input.GetKeyDown(interact)) playerInteraction.Interact();
 
@@ -38,7 +40,7 @@ public class CharacterInput : MonoBehaviour
             characterMovement.setSpeed(1.25f, 1.25f, characterMovement.walkSpeed);
         }
 
-        if(Input.GetKey(forward) || Input.GetKey(back) || Input.GetKey(left) || Input.GetKey(right))
+        if (Input.GetKey(forward) || Input.GetKey(back) || Input.GetKey(left) || Input.GetKey(right))
         {
             moveInput = moveInput.normalized;
             characterMovement.Move(moveInput);
@@ -47,10 +49,14 @@ public class CharacterInput : MonoBehaviour
         {
             characterMovement.setSpeed(0.7f, 0.7f, characterMovement.walkSpeed);
         }
+        
+        if (Input.GetKeyDown(rightClick))
+        {
+            if(flashLight.activeInHierarchy) flashLight.SetActive(false);
+            else flashLight.SetActive(true);
+        }
 
 
-        //moveInput = moveInput.normalized;
-        //characterMovement.Move(moveInput);
 
     }
 }
