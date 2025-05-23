@@ -3909,8 +3909,8 @@ MonoBehaviour:
   controladorVida: {fileID: 319935862}
   barraVidaCanvas: {fileID: 1148000997}
   cronometroActivo: 0
-  tiempoRestante: 10
-  objetivoAciertos: 5
+  tiempoRestante: 20
+  objetivoAciertos: 20
 --- !u!1 &796496834
 GameObject:
   m_ObjectHideFlags: 0
@@ -9694,7 +9694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabPayaso: {fileID: 2232339615328571015, guid: 5f4248007722e344e8081826a1051742, type: 3}
   tiempoEntrePayasos: 0.3
-  cantidadMaxima: 5
+  cantidadMaxima: 20
   textoContador: {fileID: 1478315638}
 --- !u!1 &1742350142
 GameObject:
