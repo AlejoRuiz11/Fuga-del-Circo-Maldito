@@ -1,7 +1,7 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -11,7 +11,11 @@ public class EnemyController : MonoBehaviour
     public AudioSource audioSource;
     public bool enZonaSegura = false;
     public bool enZonaJumpScare = false;
+
     private bool empezoJumpScare = false;
+    private bool yaHizoDanio = false;
+    private bool enCooldown = false;
+
     [SerializeField] private GameObject playerFlashLight;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private CharacterMovement characterMovement;
@@ -21,76 +25,78 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private LayerMask capaParedes;
     [SerializeField] private float distanciaDeteccion = 1f;
 
-    //[SerializeField] private SafeZone safeZoneScript;
+    [Header("Vida y Derrota")]
+    [SerializeField] private ControladorVida controladorVida;
+    [SerializeField] private GameObject panelMuerte;
+
+    [Header("Mensaje Zafarse")]
+    [SerializeField] private GameObject mensajeZafarse;
 
     void Update()
     {
-        if ((jugador == null || Camera.main == null || enZonaSegura) && !empezoJumpScare) 
+        if ((jugador == null || Camera.main == null || enZonaSegura) && !empezoJumpScare)
         {
-            // Si está en zona segura, no hace naSda
             animator.speed = 0f;
-            if (audioSource.isPlaying)
-            {
-                audioSource.Stop();
-            }
+            if (audioSource.isPlaying) audioSource.Stop();
             return;
         }
-        if(enZonaJumpScare)
-        {   
+
+        if (enZonaJumpScare && !empezoJumpScare && !enCooldown)
+        {
             audioSourceJumpScare.PlayOneShot(audioSourceJumpScare.clip, 0.5f);
             animator.SetBool("Jumpscare", true);
-            //transform.position += transform.forward;
-
             empezoJumpScare = true;
             animator.speed = 1f;
+
             cameraController.enemyTransform = transform;
             cameraController.sensitivity = 0f;
             cameraController.jumpScare = true;
             characterMovement.jumpScare = true;
-            //StartCoroutine(FacePlayer());
-            StartCoroutine(JumpScare());
-            
 
+            if (!yaHizoDanio)
+            {
+                controladorVida.ReducirVida(25f);
+                mensajeZafarse.SetActive(true);
+                yaHizoDanio = true;
+
+                if (controladorVida.GetVidaActual() <= 0 && panelMuerte != null)
+                {
+                    panelMuerte.SetActive(true);
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+            }
+
+            StartCoroutine(JumpScare());
             return;
         }
 
-        Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
+        if (empezoJumpScare && Input.GetKeyDown(KeyCode.E))
+        {
+            FinalizarJumpScare();
+        }
 
+        Vector3 viewPos = Camera.main.WorldToViewportPoint(transform.position);
         bool estaEnPantalla = viewPos.z > 0 && viewPos.x > 0 && viewPos.x < 1 && viewPos.y > 0 && viewPos.y < 1;
 
         if (!estaEnPantalla)
         {
             Vector3 direccion = transform.forward;
             bool hayParedAdelante = Physics.Raycast(transform.position, direccion, distanciaDeteccion, capaParedes);
-            Vector3 objetivo = new Vector3(jugador.position.x, transform.position.y, jugador.position.z);
-                Vector3 direccion1 = (objetivo - transform.position).normalized;
 
-                Quaternion rotacionDeseada = Quaternion.LookRotation(direccion1);
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, velocidadRotacion * Time.deltaTime);
-                if (!audioSource.isPlaying)
-                {
-                    audioSource.Play();
-                }
-            if (!hayParedAdelante)
-            {
-                animator.speed = 1f;
-            }
-            else
-            {
-                animator.speed = 0f;
-                if (audioSource.isPlaying)
-                {
-                    audioSource.Stop();
-                }
-            }
+            Vector3 objetivo = new Vector3(jugador.position.x, transform.position.y, jugador.position.z);
+            Vector3 direccion1 = (objetivo - transform.position).normalized;
+
+            Quaternion rotacionDeseada = Quaternion.LookRotation(direccion1);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacionDeseada, velocidadRotacion * Time.deltaTime);
+
+            if (!audioSource.isPlaying) audioSource.Play();
+            animator.speed = hayParedAdelante ? 0f : 1f;
         }
         else
         {
             animator.speed = 0f;
-            if (audioSource.isPlaying)
-            {
-                audioSource.Stop();
-            }
+            if (audioSource.isPlaying) audioSource.Stop();
         }
     }
 
@@ -100,24 +106,30 @@ public class EnemyController : MonoBehaviour
         playerFlashLight.SetActive(false);
         JumpscareCamera.SetActive(true);
         mainCamera.enabled = false;
-        
     }
-    
-/*
-    private IEnumerator FacePlayer()
+
+    private void FinalizarJumpScare()
     {
-        float rotationSpeed = 3f;
-        while(enZonaJumpScare)
-        {
-            Vector3 directionToPlayer = jugador.transform.position - transform.position;
-            directionToPlayer.y = 0;
+        empezoJumpScare = false;
+        yaHizoDanio = false;
+        enCooldown = true;
 
-            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+        animator.SetBool("Jumpscare", false);
+        JumpscareCamera.SetActive(false);
+        mainCamera.enabled = true;
+        playerFlashLight.SetActive(true);
+        mensajeZafarse.SetActive(false);
 
-            jugador.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            jugador.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime * 2);
+        cameraController.jumpScare = false;
+        characterMovement.jumpScare = false;
+        cameraController.sensitivity = 200f;
 
-            yield return null;
-        }
-    }*/
+        StartCoroutine(CooldownTiempo());
+    }
+
+    private IEnumerator CooldownTiempo()
+    {
+        yield return new WaitForSeconds(2f);
+        enCooldown = false;
+    }
 }

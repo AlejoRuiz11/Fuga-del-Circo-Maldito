@@ -31,10 +31,17 @@ public class ChangeScene : MonoBehaviour
     }
     public void CargarEscena()
     {
+        // Limpiar datos de partida guardada
         PlayerPrefs.DeleteKey("TienePartidaGuardada");
         PlayerPrefs.DeleteKey("PosX");
         PlayerPrefs.DeleteKey("PosY");
         PlayerPrefs.DeleteKey("PosZ");
+
+        // Reiniciar vida y marcar como nueva partida
+        PlayerPrefs.SetFloat("VidaActual", 100f);
+        PlayerPrefs.SetInt("NuevaPartida", 1);
+        PlayerPrefs.Save();
+
         audioSource.Stop();
         SceneManager.LoadScene("Scene2");
     }

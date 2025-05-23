@@ -33,11 +33,25 @@ public class CharacterMovement : MonoBehaviour
                 transform.position = puntoReaparicion.transform.position;
                 Debug.Log("Spawn post-minijuego aplicado.");
                 PlayerPrefs.DeleteKey("PostMiniJuego");
+                // Omitimos la carga de partida guardada si venimos del minijuego
+                return;
             }
             else
             {
                 Debug.LogWarning("No se encontró el objeto 'SpawnPostMiniJuego' en la escena.");
             }
+        }
+        
+        if (PlayerPrefs.GetInt("MostrarMuerte", 0) == 1)
+        {
+            GameObject canvasMuerte = GameObject.Find("CanvasMuerte");
+            if (canvasMuerte != null)
+            {
+                canvasMuerte.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            PlayerPrefs.DeleteKey("MostrarMuerte");
         }
 
         if (PlayerPrefs.GetInt("TienePartidaGuardada", 0) == 1)
@@ -48,6 +62,17 @@ public class CharacterMovement : MonoBehaviour
             transform.position = new Vector3(x, y, z);
             Debug.Log("Posición cargada desde partida guardada: " + transform.position);
         }
+        /*
+        if (PlayerPrefs.GetInt("LinternaRecogida", 0) == 1)
+        {
+            GameObject linternaEnMano = GameObject.Find("flashlight (1)");
+            if (linternaEnMano != null)
+            {
+                linternaEnMano.SetActive(true);
+                Debug.Log("Linterna activada desde partida guardada.");
+            }
+        }
+        */
     }
 
     public void setSpeed(float amplitudGain, float frequencyGain, float speed1)

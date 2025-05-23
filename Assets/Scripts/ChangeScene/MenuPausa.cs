@@ -46,8 +46,19 @@ public class MenuPausa : MonoBehaviour
         Time.timeScale = 1f;
         juegoPausado = false;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        // Detectar en qué escena estamos
+        string nombreEscena = SceneManager.GetActiveScene().name;
+
+        if (nombreEscena == "MinijuegoTiro")
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Confined; // permite mover libremente el cursor dentro de la ventana
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked; // solo para Scene2
+        }
     }
 
     public void SalirDelJuego()

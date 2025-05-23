@@ -12,6 +12,12 @@ public class InicioMinijuego : MonoBehaviour
     public GameObject panelVictoria;
     public GameObject panelDerrota;
 
+
+    [SerializeField] private ControladorVida controladorVida;
+
+    [SerializeField] private GameObject barraVidaCanvas;
+
+
     public bool cronometroActivo = false;
     private bool juegoIniciado = false;
     private bool juegoTerminado = false;
@@ -27,6 +33,7 @@ public class InicioMinijuego : MonoBehaviour
         textoTiempo.gameObject.SetActive(false);
         panelVictoria.SetActive(false);
         panelDerrota.SetActive(false);
+        Debug.Log("Vida en inicio minijuego: " + PlayerPrefs.GetFloat("VidaActual", 100f));
     }
 
     void Update()
@@ -93,21 +100,52 @@ public class InicioMinijuego : MonoBehaviour
         if (victoria)
         {
             panelVictoria.SetActive(true);
+            if (barraVidaCanvas != null)
+            {
+                barraVidaCanvas.SetActive(false);
+            }
+
+            PlayerPrefs.SetInt("GanoMinijuegoTiro", 1);
+            PlayerPrefs.Save();
         }
         else
         {
+            // Mostrar panel derrota
             panelDerrota.SetActive(true);
+
+            // Reducir vida
+            controladorVida.ReducirVida(50f);
+
+            // Guardar la nueva vida
+            PlayerPrefs.SetFloat("VidaActual", controladorVida.GetVidaActual());
+            PlayerPrefs.Save();
+
+            Debug.Log("Derrota en minijuego. Nueva vida: " + controladorVida.GetVidaActual());
+
+            // Mostrar canvas de muerte si corresponde
+            if (controladorVida.GetVidaActual() <= 0f)
+            {
+                GameObject canvasMuerte = GameObject.Find("CanvasMuerte");
+                if (canvasMuerte != null)
+                {
+                    canvasMuerte.SetActive(true);
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+            }
         }
     }
 
     public void Reintentar()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log("Reintentando minijuego sin reiniciar vida");
     }
 
     public void Siguiente()
     {
         PlayerPrefs.SetInt("PostMiniJuego", 1);
+        PlayerPrefs.Save();
         SceneManager.LoadScene("Scene2");
         Debug.Log("seteado spawn post-minijuego");
     }
