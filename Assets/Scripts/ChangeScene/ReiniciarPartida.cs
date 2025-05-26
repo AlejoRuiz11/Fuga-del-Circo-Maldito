@@ -7,7 +7,9 @@ public class ReiniciarPartida : MonoBehaviour
 
     public void Reiniciar()
     {
-        PlayerPrefs.DeleteAll(); // Limpia todos los datos guardados
+        PlayerPrefs.SetInt("NuevaPartida", 1);
+        /*PlayerPrefs.DeleteAll(); // Limpia todos los datos guardados
+        */
         PlayerPrefs.Save();
 
         Cursor.lockState = CursorLockMode.Locked;

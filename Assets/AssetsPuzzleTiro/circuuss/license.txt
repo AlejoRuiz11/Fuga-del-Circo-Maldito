@@ -1,0 +1,11 @@
+Model Information:
+* title:	bonky the clown
+* source:	https://sketchfab.com/3d-models/bonky-the-clown-e79712360f8a4c79a8dcbdb940721f0e
+* author:	Milan2005 (https://sketchfab.com/Milan2005)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "bonky the clown" (https://sketchfab.com/3d-models/bonky-the-clown-e79712360f8a4c79a8dcbdb940721f0e) by Milan2005 (https://sketchfab.com/Milan2005) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

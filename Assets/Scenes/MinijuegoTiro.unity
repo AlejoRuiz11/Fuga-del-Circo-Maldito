@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 20495f954400a9242bff4f4bf761a6d6, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -3910,7 +3910,7 @@ MonoBehaviour:
   barraVidaCanvas: {fileID: 1148000997}
   cronometroActivo: 0
   tiempoRestante: 20
-  objetivoAciertos: 20
+  objetivoAciertos: 60
 --- !u!1 &796496834
 GameObject:
   m_ObjectHideFlags: 0
@@ -9694,7 +9694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabPayaso: {fileID: 2232339615328571015, guid: 5f4248007722e344e8081826a1051742, type: 3}
   tiempoEntrePayasos: 0.3
-  cantidadMaxima: 20
+  cantidadMaxima: 60
   textoContador: {fileID: 1478315638}
 --- !u!1 &1742350142
 GameObject:
