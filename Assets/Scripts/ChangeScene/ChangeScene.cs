@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ChangeScene : MonoBehaviour
 {
@@ -9,12 +10,40 @@ public class ChangeScene : MonoBehaviour
     public GameObject screenInstructions;
     [SerializeField] private AudioSource audioSource;
 
+    public Button botonContinuar;
+    public Button botonNuevaPartida;
+
+    void Start()
+    {
+        if (botonContinuar != null && botonNuevaPartida != null)
+        {
+            if (PlayerPrefs.GetInt("TienePartidaGuardada", 0) == 1)
+            {
+                botonContinuar.gameObject.SetActive(true);
+                botonNuevaPartida.GetComponentInChildren<Text>().text = "Iniciar nueva partida";
+            }
+            else
+            {
+                botonContinuar.gameObject.SetActive(false);
+                botonNuevaPartida.GetComponentInChildren<Text>().text = "Jugar";
+            }
+        }
+    }
     public void CargarEscena()
     {
+        PlayerPrefs.DeleteKey("TienePartidaGuardada");
+        PlayerPrefs.DeleteKey("PosX");
+        PlayerPrefs.DeleteKey("PosY");
+        PlayerPrefs.DeleteKey("PosZ");
         audioSource.Stop();
-        SceneManager.LoadScene("Scene1");
+        SceneManager.LoadScene("Scene2");
     }
 
+    public void ContinuarPartida()
+    {
+        audioSource.Stop();
+        SceneManager.LoadScene("Scene2");
+    }
     public void MostrarConfiguracion()
     {
         screenInicio.SetActive(false);
@@ -45,6 +74,8 @@ public class ChangeScene : MonoBehaviour
         screenInicio.SetActive(false);
         screenInstructions.SetActive(true);
     }
+
+
 
     public void CerrarInstrucciones()
     {

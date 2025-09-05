@@ -1,10 +1,11 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
     public float speed;
-
+    public bool jumpScare = false;
     public float walkSpeed = 3.5f;
     public float runSpeed = 7f;
     
@@ -19,10 +20,34 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Transform head;
     [SerializeField] private Transform arm;
 
-    private void Start()
+    void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (PlayerPrefs.GetInt("PostMiniJuego", 0) == 1)
+        {
+            GameObject puntoReaparicion = GameObject.Find("SpawnPostMiniJuego");
+            if (puntoReaparicion != null)
+            {
+                transform.position = puntoReaparicion.transform.position;
+                Debug.Log("Spawn post-minijuego aplicado.");
+                PlayerPrefs.DeleteKey("PostMiniJuego");
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró el objeto 'SpawnPostMiniJuego' en la escena.");
+            }
+        }
+
+        if (PlayerPrefs.GetInt("TienePartidaGuardada", 0) == 1)
+        {
+            float x = PlayerPrefs.GetFloat("PosX", transform.position.x);
+            float y = PlayerPrefs.GetFloat("PosY", transform.position.y);
+            float z = PlayerPrefs.GetFloat("PosZ", transform.position.z);
+            transform.position = new Vector3(x, y, z);
+            Debug.Log("Posición cargada desde partida guardada: " + transform.position);
+        }
     }
 
     public void setSpeed(float amplitudGain, float frequencyGain, float speed1)
@@ -46,30 +71,34 @@ public class CharacterMovement : MonoBehaviour
     // Método para mover al personaje
     public void Move(Vector3 input)
     {
-        Vector3 forward1 = player.forward;
-        forward1.y = 0; // Eliminamos la componente vertical
-        forward1.Normalize(); // Normalizamos nuevamente
+        if(!jumpScare)
+        {
+            Vector3 forward1 = player.forward;
+            forward1.y = 0; // Eliminamos la componente vertical
+            forward1.Normalize(); // Normalizamos nuevamente
 
-        Vector3 moveDirection = (player.right * input.x + playerAllBody.up * input.y + forward1 * input.z).normalized;
-        //Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized; // *****C
-       
-        moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
-        //moveDirection.y = player.up.y * input.y; // *****C
+            Vector3 moveDirection = (player.right * input.x + playerAllBody.up * input.y + forward1 * input.z).normalized;
+            //Vector3 moveDirection = (player.right * input.x + player.up * input.y + player.forward * input.z).normalized; // *****C
         
-        moveDirection.x *= speed;
-        moveDirection.z *= speed;
+            moveDirection.y = playerAllBody.up.y * input.y; // *****CNueeva
+            //moveDirection.y = player.up.y * input.y; // *****C
+            
+            moveDirection.x *= speed;
+            moveDirection.z *= speed;
 
 
-            // Modificando Transform
-            //player.position += moveDirection * speed * Time.deltaTime;
+                // Modificando Transform
+                //player.position += moveDirection * speed * Time.deltaTime;
 
-            // Modificando Rigidbody
-            //Vector3 velocity = moveDirection * speed;
-            //rb.MovePosition(rb.position + velocity * Time.deltaTime);
+                // Modificando Rigidbody
+                //Vector3 velocity = moveDirection * speed;
+                //rb.MovePosition(rb.position + velocity * Time.deltaTime);
 
-            // Modificando Character Controller
-            //characterController.Move(moveDirection.normalized * 5 * Time.deltaTime);
-        characterController.Move(moveDirection * Time.deltaTime);
+                // Modificando Character Controller
+                //characterController.Move(moveDirection.normalized * 5 * Time.deltaTime);
+            characterController.Move(moveDirection * Time.deltaTime);
+        }
+        
 
     }
 

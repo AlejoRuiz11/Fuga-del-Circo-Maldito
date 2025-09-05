@@ -11,7 +11,8 @@ public class CameraController : MonoBehaviour
 
     private float xRotation = 0f;
     private float yRotation = 0f;
-
+    public bool jumpScare = false;
+    public Transform enemyTransform;
 
 
     void Start()
@@ -34,22 +35,40 @@ public class CameraController : MonoBehaviour
 
         cameraRoot.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);*/
 
-        
-        xRotation += Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
-        yRotation += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+        if(jumpScare)
+        {
+            Vector3 directionToEnemy = enemyTransform.position - transform.position;
+            directionToEnemy.y = 0; // Opcional: evita mirar hacia arriba o abajo
 
-        xRotation = Mathf.Clamp(xRotation, -90.0f, 90.0f);
+            Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
 
-        hand.localRotation = Quaternion.Euler(-xRotation, yRotation, 0);
+            // Aplica la rotación al cuerpo visual, al transform y a la cámara
+            hand.localRotation = Quaternion.Lerp(hand.localRotation,Quaternion.Euler(0, lookRotation.eulerAngles.y + 90f, 0),cameraAcceleration * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, cameraAcceleration * Time.deltaTime);
+            visualBody.localRotation = Quaternion.Lerp(visualBody.localRotation, Quaternion.Euler(0, lookRotation.eulerAngles.y, 0), cameraAcceleration * Time.deltaTime);
+            _camera.localRotation = Quaternion.Lerp(_camera.localRotation, Quaternion.Euler(0, 0, 0), cameraAcceleration * Time.deltaTime); // Puedes ajustar esto si querés una mirada específica
 
-        transform.localRotation = Quaternion.Lerp(transform.localRotation,
-        Quaternion.Euler(0, yRotation, 0), cameraAcceleration * Time.deltaTime);
+            Debug.Log("JumpScare: girando hacia el enemigo");
+            return;
+        }
+        else
+        {
+            xRotation += Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
+            yRotation += Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
 
-        visualBody.localRotation = Quaternion.Lerp(visualBody.localRotation,
-        Quaternion.Euler(0, yRotation, 0), cameraAcceleration * Time.deltaTime);
+            xRotation = Mathf.Clamp(xRotation, -90.0f, 90.0f);
 
-        _camera.localRotation = Quaternion.Lerp(_camera.localRotation,
-        Quaternion.Euler(-xRotation, 0, 0), cameraAcceleration * Time.deltaTime);
+            hand.localRotation = Quaternion.Euler(-xRotation, yRotation, 0);
+
+            transform.localRotation = Quaternion.Lerp(transform.localRotation,
+            Quaternion.Euler(0, yRotation, 0), cameraAcceleration * Time.deltaTime);
+
+            visualBody.localRotation = Quaternion.Lerp(visualBody.localRotation,
+            Quaternion.Euler(0, yRotation, 0), cameraAcceleration * Time.deltaTime);
+
+            _camera.localRotation = Quaternion.Lerp(_camera.localRotation,
+            Quaternion.Euler(-xRotation, 0, 0), cameraAcceleration * Time.deltaTime);
+        }
 
     }
 }
